@@ -1,0 +1,5 @@
+Say
+
+   mvn site:run
+
+and navigate your browser to http://localhost:8080 for the documentation.

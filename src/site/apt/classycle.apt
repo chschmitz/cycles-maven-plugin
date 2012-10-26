@@ -1,0 +1,20 @@
+ -----
+ Maven-Cycles-Plugin
+ -----
+ Christoph Schmitz
+ ------
+ 2012-08-31
+ ------
+
+Obtaining the Classycle dependency
+
+ Unfortunately, the Classycle library, upon which this plugin depends, is not available from Maven repositories.
+ Thus, you will have to install it to your local repository before building.
+
+ Download the Classycle package from {{{http://classycle.sourceforge.net/}SourceForge}} and 
+ install the <<<classycle.jar>>> to your local Maven repository like so:
+
+---------------
+mvn install:install-file -Dfile=classycle.jar -DgroupId=net.sf.classycle -DartifactId=classycle -Dversion=1.4 -Dpackaging=jar
+---------------
+

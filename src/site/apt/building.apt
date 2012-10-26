@@ -1,0 +1,16 @@
+ -----
+ Maven-Cycles-Plugin
+ -----
+ Christoph Schmitz
+ ------
+ 2012-08-31
+ ------
+
+Building
+
+ Building this plugin should be pretty standard. Make sure you have {{{./classycle.html}deployed the Classycle jar locally}}
+ and then build the plugin with Maven:
+
+------------
+mvn clean install
+------------

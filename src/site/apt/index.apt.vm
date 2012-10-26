@@ -1,0 +1,146 @@
+ -----
+ Maven Cycles Plugin
+ -----
+ Christoph Schmitz
+ ------
+ 2012-08-31
+ ------
+
+Overview
+
+ Tools such as JDepend enable you to detect dependency cycles between your Java packages.
+ Unfortunately, they don't help very much in actually finding dependencies causing the 
+ cycles and removing them.
+
+ With the Maven Cycles Plugin, dependency cycles can be made explicit. More exactly, the 
+ plugin prints all {{{http://en.wikipedia.org/wiki/Strongly_connected_component}strongly connected components}} 
+ of the package dependency graph. Furthermore, the plugin contains a heuristic to suggest minimal sets 
+ of dependencies which can be removed to break the cycles.
+
+ This can only be done heuristically for two reasons: on the one hand, the problem of finding
+ minimal cycle-breaking edge sets in a graph is NP-hard, and thus no efficient algorithm to solve
+ it even for medium-sized graphs is known. On the other hand, it is not possible to detect algorithmically 
+ which dependency is actually intended by the developer and which was just added by accident.
+
+ The results of the analysis are presented as text, and optionally, in {{{http://www.graphviz.org/}Graphviz}} syntax.
+ Dependency graphs of the strongly connected components can then be visualized using {{{http://www.graphviz.org/}Graphviz}}. 
+
+Usage
+
++----------------------
+mvn ${project.groupId}:${project.artifactId}:${project.version}:cycles
++----------------------
+
+ or
+
++----------------------
+mvn cycles:cycles
++----------------------
+
+ Detects the strongly connected components among the packages in 
+ <<<$project.build.outputDirectory>>> (<<<target/classes>>>) and lists them, including 
+ suggestions for the cycle-breaking dependencies.
+
+ <<Note:>> the short version only works if you configure your plugin groups appropriately; see
+ "{{Configuration}}" below.
+
++---------------------
+mvn cycles:cycles -Dshorten=false -Dnameprefix=net.oneandone.maven.plugins.cycles
++---------------------
+
+ Same as above, but the package names are spelled out fully and the packages are filtered so that
+ only those with the given prefix are shown.
+
+* Configuration properties
+
+  * <<<nameprefix>>>: Filter prefix on class names (default: "")
+
+  * <<<classDir>>>: Directory in which classes are expected (Default: <<<$\{project.build.outputDirectory\}>>>)
+
+  * <<<classDeps>>>: Iff true, dependencies on the class level are shown as well in order to explain where
+       the package dependencies come from (default: false)
+
+  * <<<shorten>>>: Iff true, package names will be abbreviated (default: true)
+
+  * <<<writeDotFiles>>>: Iff true, Graphviz files will be generated for each component (default: true)
+  
+  * <<<packageDepth>>>: Iff true, packages will be aggregated to this depth (e.g., if packageDepth == 2,
+    all packages <<<net.oneandone.*>>> will be counted as <<<net.oneandone>>>).
+  
+{Configuration}
+
+ In the Maven configuration <<<.m2/settings.xml>>> the Group ID of this plugin must be registered as a plugin group
+ if the plugin is to be used with its short name (<<<cycles:cycles>>> instead of <<<net.oneandone.maven.plugins:cycles-mavenplugin:1.1.0:cycles>>>):
+ 
++-------------
+<settings>
+   ...
+  <pluginGroups>
+    <pluginGroup>${project.groupId}</pluginGroup>
+    ...
+  </pluginGroups>
+</settings>
++-------------
+
+Output
+
+* Console output
+
++---------------------
+[INFO] --- ${project.artifactId}:${project.version}:cycles (default-cli) @ ${project.artifactId} ---
+=== Cycle / strongly connected component (2 packages, 2 dependencies)
+
+= Packages
+c.u.m.c.analyzer
+c.u.m.c.graph
+
+= Dependencies
+c.u.m.c.analyzer -> c.u.m.c.graph [11]
+c.u.m.c.graph -> c.u.m.c.analyzer [1]
+
+= Cycle-breaking dependencies
+c.u.m.c.graph -> c.u.m.c.analyzer [1]
++---------------------
+
+ All non-trivial strongly connected components will be shown, i.e., all the maximal
+ sets of at least two packages in which every package is transitively dependent upon every other.
+
+ The numbers in square brackets show the number of dependencies on the class level.
+
+ In this example, a dependency from <<<graph>>> to <<<analyzer>>> was added to demonstrate the algorithm.
+ Obviously, the dependency was intended the other way around ((<<<analyzer -\> graph [11]>>>). 
+
+ If the dependency is removed, there is no more strongly connected component and the dependency graph
+ is acyclic again.
+
++---------------------
+[INFO] --- ${project.artifactId}:${project.version}:cycles (default-cli) @ ${project.artifactId} ---
+[INFO] No package cycles.
++---------------------
+
+* Graphviz Output
+
+ Unless the Graphviz output is suppressed by configuration, files <<<target/graph-0.dot>>>, <<<target/graph-1.dot>>>
+ are generated that can be visualized with any Graphviz-compatible tool: 
+
++--------------
+$ dot -Tpng graph-0.dot > graph-0.png 
+$ dot -Tsvg graph-0.dot > graph-0.svg
+$ # usw.
++--------------
+
+ Example:
+
+[./images/graph.png]
+
+ The red arrows indicate the dependencies that should be removed. The numbers are the dependencies 
+ on the class level.
+
+Algorithms
+
+  * Finding strongly connected components: Tarjan, R. E. (1972), "Depth-first search and linear graph algorithms", SIAM Journal on Computing 1 (2): 146–160. 
+
+  * Breaking cycles: Peter Eades, Xuemin Lin, and W. F. Smyth. "A Fast and Effective Heuristic for the Feedback Arc Set Problem.". Inf. Process. Lett., Vol. 47, Nr. 6 (1993), p. 319-323.
+
+  * The algorithm by Eades et al. was enhanced such that it tries to break dependencies 
+    von {{{http://c2.com/cgi/wiki?StableDependenciesPrinciple}from stable to instable packages}}.
