@@ -30,9 +30,19 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-public class ClassDependencies {
+/**
+ * Represents dependencies on a per-class level.
+ * 
+ * @author chschmitz
+ */
+public final class ClassDependencies {
     private Map<String, Collection<ClassDependency>> classDependencies;
     
+    /**
+     * @param classDirOrJar the class directory or jar file
+     * @param nameFilter the name filter (on FQCNs)
+     * @throws IOException iff parsing the class files fails
+     */
     public ClassDependencies(File classDirOrJar, Predicate<String> nameFilter) throws IOException {
         AtomicVertex[] classGraph = getClassGraph(classDirOrJar);
         classDependencies = Maps.newHashMap();

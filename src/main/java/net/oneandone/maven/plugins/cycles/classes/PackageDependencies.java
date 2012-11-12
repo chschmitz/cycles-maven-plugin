@@ -25,9 +25,20 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-public class PackageDependencies {
+/**
+ * Represents package-level dependencies.
+ * 
+ * @author chschmitz
+ */
+public final class PackageDependencies {
     private Map<String, Set<PackageDependency>> packageDependencies;
 
+    /**
+     * @param classDependencies the class-level dependencies
+     * @param depth the aggregation depth (i.e., the length of the FQCN prefixes to which the package
+     * dependencies are aggregated; i.e. "2" means <code>net.oneandone</code>, "3" means 
+     * <code>net.oneandone.maven</code> etc.)
+     */
     public PackageDependencies(ClassDependencies classDependencies, int depth) {
         Map<String, Map<String, Set<ClassDependency>>> packageDependenciesRaw = Maps.newHashMap();
         

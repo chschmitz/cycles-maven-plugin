@@ -80,6 +80,7 @@ public final class GraphDotUtils {
      * @return the dot representation (shortened)
      */
     public static String edgeToDot(WeightedEdge edge, DirectedGraph<String, WeightedEdge> g, boolean shorten) {
-        return "\"" + GraphStringUtils.shorten(g.getSource(edge), shorten) + "\" -> \"" + GraphStringUtils.shorten(g.getDest(edge), shorten) + "\"";
+        return "\"" + GraphStringUtils.shorten(g.getSource(edge), shorten) + "\" -> \"" 
+                + GraphStringUtils.shorten(g.getDest(edge), shorten) + "\"";
     }
 }

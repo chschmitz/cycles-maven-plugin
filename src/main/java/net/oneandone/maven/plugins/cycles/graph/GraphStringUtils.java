@@ -65,10 +65,15 @@ public final class GraphStringUtils {
                 + " [" + (int) edge.getWeight() + "]";
     }
 
-    private GraphStringUtils() {
-    }
-
+    /**
+     * @param classDependency a class dependency
+     * @param shorten whether to shorten the FQCN
+     * @return a string representation of the dependency
+     */
     public static String dependencyToString(ClassDependency classDependency, boolean shorten) {
         return shorten(classDependency.getFrom(), shorten) + " -> " + shorten(classDependency.getTo(), shorten);
+    }
+
+    private GraphStringUtils() {
     }
 }

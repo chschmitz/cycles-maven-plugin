@@ -29,10 +29,8 @@ public final class WeightedEdge {
     private Set<ClassDependency> dependencies;
 
     /**
-     * @param id
-     *            the id
-     * @param weight
-     *            the weight
+     * @param id the id
+     * @param dependencies the class dependencies causing this edge
      */
     public WeightedEdge(int id, Set<ClassDependency> dependencies) {
         super();

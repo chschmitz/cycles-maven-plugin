@@ -55,6 +55,7 @@ public final class ComponentAnalyzer {
      * @param shorten whether to shorten the class names
      * @param writeDotFiles iff true, .dot files will be written
      * @param packageDepth prefix depth to which packages are aggregated 
+     * @param showClassDeps iff true, class-level dependencies are shown
      */
     public ComponentAnalyzer(File classDir, String filterPrefix, boolean shorten, boolean writeDotFiles, 
             int packageDepth, boolean showClassDeps) {

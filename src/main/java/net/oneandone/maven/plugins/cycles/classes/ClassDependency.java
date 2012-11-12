@@ -17,10 +17,19 @@ package net.oneandone.maven.plugins.cycles.classes;
 
 import com.google.common.base.Objects;
 
-public class ClassDependency {
+/**
+ * Represents a single class dependency.
+ * 
+ * @author chschmitz
+ */
+public final class ClassDependency {
     private String from;
     private String to;
 
+    /**
+     * @param from the depending class
+     * @param to the class that <code>from</code> depends on
+     */
     public ClassDependency(String from, String to) {
         this.from = from;
         this.to = to;

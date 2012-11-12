@@ -17,11 +17,21 @@ package net.oneandone.maven.plugins.cycles.classes;
 
 import java.util.Set;
 
-public class PackageDependency {
+/**
+ * Represents a single package dependency.
+ * 
+ * @author chschmitz
+ */
+public final class PackageDependency {
     private String from;
     private String to;
     private Set<ClassDependency> classDependencies;
     
+    /**
+     * @param from the depending package
+     * @param to the package that <code>from</code> depends on
+     * @param classDependencies the underlying class dependencies
+     */
     public PackageDependency(String from, String to, Set<ClassDependency> classDependencies) {
         this.from = from;
         this.to = to;

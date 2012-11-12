@@ -66,7 +66,8 @@ public final class GraphBuilder {
         DirectedGraph<String, WeightedEdge> graph = new DirectedSparseGraph<String, WeightedEdge>();
       
         int id = 0;
-        for (Entry<String, Set<PackageDependency>> dependency : packageDependencies.getPackageDependencies().entrySet()) {
+        for (Entry<String, Set<PackageDependency>> dependency 
+                : packageDependencies.getPackageDependencies().entrySet()) {
             String fromPkg = dependency.getKey();
             for (PackageDependency pkgDep : dependency.getValue()) {
                 String toPkg = pkgDep.getTo();
