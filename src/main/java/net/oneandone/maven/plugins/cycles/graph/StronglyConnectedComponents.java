@@ -84,5 +84,6 @@ public final class StronglyConnectedComponents {
     }
     
     private StronglyConnectedComponents() {
+        // Don't instantiate
     }
 }

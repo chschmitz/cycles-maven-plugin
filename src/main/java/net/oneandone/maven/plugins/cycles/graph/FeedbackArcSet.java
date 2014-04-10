@@ -151,5 +151,6 @@ public final class FeedbackArcSet {
     }
 
     private FeedbackArcSet() {
+        // Don't instantiate
     }
 }

@@ -105,6 +105,4 @@ public class CyclesMojo extends AbstractMojo {
     void setPackageDepth(int packageDepth) {
         this.packageDepth = packageDepth;
     }
-    
-    
 }

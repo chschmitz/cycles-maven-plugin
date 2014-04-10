@@ -19,6 +19,8 @@ import java.util.Set;
 
 import net.oneandone.maven.plugins.cycles.classes.ClassDependency;
 
+import com.google.common.base.Objects;
+
 /**
  * An edge type with an integer identity and a real-valued weight.
  * 
@@ -53,10 +55,7 @@ public final class WeightedEdge {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        return result;
+        return Objects.hashCode(id);
     }
 
     @Override
@@ -71,9 +70,6 @@ public final class WeightedEdge {
             return false;
         }
         WeightedEdge other = (WeightedEdge) obj;
-        if (id != other.id) {
-            return false;
-        }
-        return true;
+        return Objects.equal(id, other.id);
     }
 }

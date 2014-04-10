@@ -18,7 +18,8 @@ package net.oneandone.maven.plugins.cycles.graph;
 import edu.uci.ics.jung.graph.DirectedGraph;
 
 /**
- * {@link VertexEvaluator} that uses out degrees.
+ * {@link VertexEvaluator} that uses out degrees; the weight of a vertex is how many more
+ * outbound edges there are than inbound edges.
  * 
  * @author chschmitz
  *
@@ -27,6 +28,7 @@ import edu.uci.ics.jung.graph.DirectedGraph;
  */
 public final class DefaultVertexEvaluator<V, G extends DirectedGraph<V, ?>> 
     implements VertexEvaluator<V, G> {
+    
     @Override
     public double weight(V vertex, G graph) {
         return (double) graph.outDegree(vertex) - (double) graph.inDegree(vertex);

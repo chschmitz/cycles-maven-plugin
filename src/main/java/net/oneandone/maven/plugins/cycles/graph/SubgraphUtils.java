@@ -42,5 +42,6 @@ public final class SubgraphUtils {
     }
 
     private SubgraphUtils() {
+        // Don't instantiate
     }
 }

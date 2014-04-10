@@ -80,5 +80,6 @@ public final class GraphBuilder {
 
 
     private GraphBuilder() {
+        // Don't instantiate
     }
 }

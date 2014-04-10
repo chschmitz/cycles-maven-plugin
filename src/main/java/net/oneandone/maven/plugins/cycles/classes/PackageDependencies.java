@@ -55,6 +55,19 @@ public final class PackageDependencies {
         packageDependencies = convertToPackageDependencies(packageDependenciesRaw);
     }
     
+    public Map<String, Set<PackageDependency>> getPackageDependencies() {
+        return packageDependencies;
+    }
+
+    /**
+     * @param className a class name
+     * @return the package name of that class
+     */
+    public static String getPackageNameOfClass(String className) {
+        int index = className.lastIndexOf('.');
+        return index < 0 ? "(default package)" : className.substring(0, index);
+    }
+
     private Map<String, Set<PackageDependency>> convertToPackageDependencies(
             Map<String, Map<String, Set<ClassDependency>>> packageDependenciesRaw) {
         Map<String, Set<PackageDependency>> packageDependencies = Maps.newHashMap();
@@ -80,19 +93,6 @@ public final class PackageDependencies {
         packageDependenciesRaw.get(sourcePkg).get(destPkg).add(classDep);
     }
 
-    public Map<String, Set<PackageDependency>> getPackageDependencies() {
-        return packageDependencies;
-    }
-    
-    /**
-     * @param className a class name
-     * @return the package name of that class
-     */
-    public static String getPackageNameOfClass(String className) {
-        int index = className.lastIndexOf('.');
-        return index < 0 ? "(default package)" : className.substring(0, index);
-    }
-    
     private static String packagePrefix(String pkg, int depth) {
         return Joiner.on('.').join(Lists.partition(ImmutableList.copyOf(Splitter.on('.').split(pkg)), depth).get(0));
     }

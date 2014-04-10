@@ -70,9 +70,6 @@ public final class GraphDotUtils {
         return Ordering.from(new WeightedEdgeComparator(component)).min(component.getEdges()).getWeight();
     }
 
-    private GraphDotUtils() {
-    }
-
     /**
      * @param edge an edge
      * @param g a graph
@@ -82,5 +79,9 @@ public final class GraphDotUtils {
     public static String edgeToDot(WeightedEdge edge, DirectedGraph<String, WeightedEdge> g, boolean shorten) {
         return "\"" + GraphStringUtils.shorten(g.getSource(edge), shorten) + "\" -> \"" 
                 + GraphStringUtils.shorten(g.getDest(edge), shorten) + "\"";
+    }
+    
+    private GraphDotUtils() {
+        // Don't instantiate
     }
 }

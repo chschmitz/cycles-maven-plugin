@@ -85,7 +85,7 @@ public final class ComponentAnalyzer {
         return builder.toString();
     }
 
-    private  void printCycles(Collection<DirectedGraph<String, WeightedEdge>> components, StringBuilder builder)
+    private void printCycles(Collection<DirectedGraph<String, WeightedEdge>> components, StringBuilder builder)
             throws IOException {
         cycleCount = 0;
         for (DirectedGraph<String, WeightedEdge> component : components) {
@@ -97,7 +97,7 @@ public final class ComponentAnalyzer {
         }
     }
 
-    private  void printCycle(DirectedGraph<String, WeightedEdge> component, StringBuilder builder) {
+    private void printCycle(DirectedGraph<String, WeightedEdge> component, StringBuilder builder) {
         builder.append(String.format("=== Cycle / strongly connected component (%d packages, %d dependencies)",
                 component.getVertexCount(), component.getEdgeCount()));
         builder.append("\n");
@@ -124,7 +124,7 @@ public final class ComponentAnalyzer {
         }
     }
 
-    private  void printDependencies(DirectedGraph<String, WeightedEdge> component, StringBuilder builder) {
+    private void printDependencies(DirectedGraph<String, WeightedEdge> component, StringBuilder builder) {
         builder.append("\n= Dependencies\n");
         TreeSet<WeightedEdge> sortedEdges = Sets.newTreeSet(new WeightedEdgeComparator(component));
         sortedEdges.addAll(component.getEdges());
@@ -149,7 +149,7 @@ public final class ComponentAnalyzer {
         }
     }
 
-    private  void printPackages(DirectedGraph<String, WeightedEdge> component, StringBuilder builder) {
+    private void printPackages(DirectedGraph<String, WeightedEdge> component, StringBuilder builder) {
         builder.append("\n= Packages\n");
         for (String pkg : Sets.newTreeSet(component.getVertices())) {
             builder.append(GraphStringUtils.vertexToString(pkg, shorten));
