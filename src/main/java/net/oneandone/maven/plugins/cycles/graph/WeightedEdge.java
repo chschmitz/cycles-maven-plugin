@@ -38,7 +38,6 @@ public final class WeightedEdge {
         super();
         this.id = id;
         this.dependencies = dependencies;
-        
     }
 
     public int getId() {

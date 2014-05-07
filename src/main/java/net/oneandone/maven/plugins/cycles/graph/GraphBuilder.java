@@ -78,7 +78,6 @@ public final class GraphBuilder {
         return graph;
     }
 
-
     private GraphBuilder() {
         // Don't instantiate
     }

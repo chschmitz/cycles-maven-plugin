@@ -18,7 +18,7 @@ package net.oneandone.maven.plugins.cycles.graph;
 import edu.uci.ics.jung.graph.DirectedGraph;
 
 /**
- * Favours breaking edges from stable to instable packages, i.e., from those
+ * Favours breaking edges from stable to unstable packages, i.e., from those
  * with a high indegree to those with a high outdegree. 
  * 
  * @author chschmitz
