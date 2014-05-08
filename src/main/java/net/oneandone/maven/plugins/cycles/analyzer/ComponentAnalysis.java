@@ -17,12 +17,17 @@ package net.oneandone.maven.plugins.cycles.analyzer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 
 import net.oneandone.maven.plugins.cycles.graph.GraphBuilder;
+import net.oneandone.maven.plugins.cycles.graph.NameFilter;
 import net.oneandone.maven.plugins.cycles.graph.StronglyConnectedComponents;
 import net.oneandone.maven.plugins.cycles.graph.SubgraphUtils;
 import net.oneandone.maven.plugins.cycles.graph.WeightedEdge;
+
+import com.google.common.base.Predicate;
+
 import edu.uci.ics.jung.graph.DirectedGraph;
 
 /**
@@ -32,21 +37,30 @@ import edu.uci.ics.jung.graph.DirectedGraph;
  * @author chschmitz
  */
 public final class ComponentAnalysis {
-    private File classDir;
-    private String filterPrefix;
+    private Predicate<String> nameFilter;
     private Collection<DirectedGraph<String, WeightedEdge>> strongComponents;
     private int packageDepth;
+    private File[] classDirs;
     
     /**
-     * @param classDir a class directory or jar file
      * @param filterPrefix a filter prefix on full class names
      * @param packageDepth depth to which package prefixes are aggregated
+     * @param classDirs class directories or jar files
      * @throws IOException if parsing the class files fails
      */
-    public ComponentAnalysis(File classDir, String filterPrefix, int packageDepth) throws IOException {
-        super();
-        this.classDir = classDir;
-        this.filterPrefix = filterPrefix;
+    public ComponentAnalysis(String filterPrefix, int packageDepth, File... classDirs) throws IOException {
+        this(NameFilter.nameFilter(filterPrefix), packageDepth, classDirs);
+    }
+    
+    /**
+     * @param nameFilter a filter on class names
+     * @param packageDepth depth to which package prefixes are aggregated
+     * @param classDirs class directories or jar files
+     * @throws IOException if parsing the class files fails
+     */
+    public ComponentAnalysis(Predicate<String> nameFilter, int packageDepth, File... classDirs) throws IOException {
+        this.nameFilter = nameFilter;
+        this.classDirs = Arrays.copyOf(classDirs, classDirs.length);
         this.packageDepth = packageDepth;
         
         analyze();
@@ -54,7 +68,7 @@ public final class ComponentAnalysis {
 
     private void analyze() throws IOException {
          DirectedGraph<String, WeightedEdge> packageGraph = 
-                 GraphBuilder.buildPackageGraph(classDir, NameFilter.nameFilter(filterPrefix), packageDepth);
+                 GraphBuilder.buildPackageGraph(nameFilter, packageDepth, classDirs);
          strongComponents = SubgraphUtils.asSubgraphs(
                  StronglyConnectedComponents.strongComponentsAsSets(packageGraph), packageGraph);
     }

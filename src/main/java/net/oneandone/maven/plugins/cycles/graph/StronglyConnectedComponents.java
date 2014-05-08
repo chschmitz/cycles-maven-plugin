@@ -73,14 +73,18 @@ public final class StronglyConnectedComponents {
             }
         }
         if (vlowlink.get(v).equals(vindex.get(v))) {
-            Set<V> component = Sets.newHashSet();
-            V w;
-            do {
-                w = s.pop();
-                component.add(w);
-            } while (v != w);
-            acc.add(component);
+            extractNewComponent(v, s, acc);
         }
+    }
+
+    private static <V> void extractNewComponent(V v, Stack<V> s, List<Set<V>> acc) {
+        Set<V> component = Sets.newHashSet();
+        V w;
+        do {
+            w = s.pop();
+            component.add(w);
+        } while (v != w);
+        acc.add(component);
     }
     
     private StronglyConnectedComponents() {

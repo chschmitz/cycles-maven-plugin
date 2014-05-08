@@ -37,27 +37,27 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph;
  */
 public final class GraphBuilder {
     /**
-     * @param classDir a class directory or Jar file
      * @param nameFilter a name filter on package names
+     * @param classDirs class directories or Jar files
      * @return a directed graph of package dependencies
      * @throws IOException if I/O fails
      */
-    public static DirectedGraph<String, WeightedEdge> buildPackageGraph(File classDir, 
-            Predicate<String> nameFilter) throws IOException {
-        return buildPackageGraph(classDir, nameFilter, Integer.MAX_VALUE);
+    public static DirectedGraph<String, WeightedEdge> buildPackageGraph(Predicate<String> nameFilter, 
+            File classDirs) throws IOException {
+        return buildPackageGraph(nameFilter, Integer.MAX_VALUE, classDirs);
     }
 
     /**
-     * @param classDir a class directory or Jar file
      * @param nameFilter a name filter on package names
      * @param packageDepth depth to which package names are aggregated (1 = "com", 2 = "com.unitedinternet", etc.)
+     * @param classDirs a class directory or Jar file
      * @return a directed graph of package dependencies
      * @throws IOException if I/O fails
      */
-    public static DirectedGraph<String, WeightedEdge> buildPackageGraph(File classDir, Predicate<String> nameFilter, 
-            int packageDepth) throws IOException {
+    public static DirectedGraph<String, WeightedEdge> buildPackageGraph(Predicate<String> nameFilter, int packageDepth, 
+            File... classDirs) throws IOException {
         
-        ClassDependencies classDependencies = new ClassDependencies(classDir, nameFilter);
+        ClassDependencies classDependencies = new ClassDependencies(nameFilter, classDirs);
         PackageDependencies packageDependencies = new PackageDependencies(classDependencies, packageDepth);
         return buildGraph(packageDependencies);
     }

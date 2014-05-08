@@ -142,6 +142,16 @@ public class StronglyConnectedComponentsTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testTwoLargeLoops() {
+        DirectedGraph<Integer, Integer> graph = makeLargeGraph();
+
+        Collection<Set<Integer>> components = StronglyConnectedComponents.strongComponentsAsSets(graph);
+        assertThat(components.size(), is(3));
+        for (Set<Integer> component : components) {
+            assertThat(component.size(), anyOf(is(100), is(1)));
+        }
+    }
+
+    private DirectedGraph<Integer, Integer> makeLargeGraph() {
         DirectedGraph<Integer, Integer> graph = new DirectedSparseGraph<Integer, Integer>();
         for (int i = 0; i < 100; i++) {
             graph.addEdge(i, i, (i + 1) % 100);
@@ -151,12 +161,7 @@ public class StronglyConnectedComponentsTest {
         }
         graph.addEdge(200, 0, 200);
         graph.addEdge(201, 200, 100);
-
-        Collection<Set<Integer>> components = StronglyConnectedComponents.strongComponentsAsSets(graph);
-        assertThat(components.size(), is(3));
-        for (Set<Integer> component : components) {
-            assertThat(component.size(), anyOf(is(100), is(1)));
-        }
+        return graph;
     }
 
     @Test

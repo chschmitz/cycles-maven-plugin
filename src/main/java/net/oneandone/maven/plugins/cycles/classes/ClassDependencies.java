@@ -39,12 +39,12 @@ public final class ClassDependencies {
     private Map<String, Collection<ClassDependency>> classDependencies;
     
     /**
-     * @param classDirOrJar the class directory or jar file
      * @param nameFilter the name filter (on FQCNs)
+     * @param classDirsOrJars the class directories or jar files
      * @throws IOException iff parsing the class files fails
      */
-    public ClassDependencies(File classDirOrJar, Predicate<String> nameFilter) throws IOException {
-        AtomicVertex[] classGraph = getClassGraph(classDirOrJar);
+    public ClassDependencies(Predicate<String> nameFilter, File... classDirsOrJars) throws IOException {
+        AtomicVertex[] classGraph = getClassGraph(classDirsOrJars);
         classDependencies = Maps.newHashMap();
         for (AtomicVertex clazz : classGraph) {
             if (nameFilter.apply(getClassName(clazz))) {
@@ -69,11 +69,16 @@ public final class ClassDependencies {
         return classDependencies;
     }
     
-    private static AtomicVertex[] getClassGraph(File classDir) throws IOException {
-        Preconditions.checkArgument(classDir.exists(),
-                "Class directory %s does not exist, please run 'mvn compile'.",
-                classDir.getAbsolutePath());
-        Analyser analyser = new Analyser(new String[] { classDir.getAbsolutePath() });
+    private static AtomicVertex[] getClassGraph(File... classDirs) throws IOException {
+        String[] classDirNames = new String[classDirs.length];
+        int i = 0;
+        for (File classDir : classDirs) {
+            Preconditions.checkArgument(classDir.exists(),
+                    "Class directory %s does not exist, please run 'mvn compile'.",
+                    classDir.getAbsolutePath());
+            classDirNames[i++] = classDir.getAbsolutePath();
+        }
+        Analyser analyser = new Analyser(classDirNames);
         analyser.createClassGraph();
         return analyser.getClassGraph();
     }

@@ -21,8 +21,6 @@ import static org.junit.Assert.assertThat;
 import java.io.File;
 import java.io.IOException;
 
-import net.oneandone.maven.plugins.cycles.analyzer.NameFilter;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,16 +36,16 @@ public class GraphBuilderTest {
     
     @Test
     public void testBuildGraph() throws IOException {
-        DirectedGraph<String, WeightedEdge> graph = GraphBuilder.buildPackageGraph(baseDir, 
-                NameFilter.nameFilter("net.oneandone.maven.plugins.cycles.graph"));
+        DirectedGraph<String, WeightedEdge> graph = GraphBuilder.buildPackageGraph(NameFilter.nameFilter("net.oneandone.maven.plugins.cycles.graph"), 
+                baseDir);
         assertThat(graph.getVertexCount(), is(3));
         assertThat(graph.getEdgeCount(), is(3));
     }
 
     @Test
     public void testBuildGraphCollapse() throws IOException {
-        DirectedGraph<String, WeightedEdge> graph = GraphBuilder.buildPackageGraph(baseDir, 
-                NameFilter.nameFilter("net.oneandone.maven.plugins.cycles.graph"), 7);
+        DirectedGraph<String, WeightedEdge> graph = GraphBuilder.buildPackageGraph(NameFilter.nameFilter("net.oneandone.maven.plugins.cycles.graph"), 
+                7, baseDir);
         assertThat(graph.getVertexCount(), is(2));
         assertThat(graph.getEdgeCount(), is(2));
         assertThat(graph.getEdges().iterator().next().getWeight(), is(2d));

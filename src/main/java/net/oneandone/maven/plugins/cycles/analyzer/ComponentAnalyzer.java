@@ -17,6 +17,7 @@ package net.oneandone.maven.plugins.cycles.analyzer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -41,7 +42,7 @@ import edu.uci.ics.jung.graph.DirectedGraph;
  * @author chschmitz
  */
 public final class ComponentAnalyzer {
-    private File classDir;
+    private File[] classDirs;
     private String filterPrefix;
     private boolean shorten;
     private boolean writeDotFiles;
@@ -50,16 +51,16 @@ public final class ComponentAnalyzer {
     private boolean showClassDeps;
 
     /**
-     * @param classDir source of our class files
      * @param filterPrefix class name filter prefix
      * @param shorten whether to shorten the class names
      * @param writeDotFiles iff true, .dot files will be written
      * @param packageDepth prefix depth to which packages are aggregated 
      * @param showClassDeps iff true, class-level dependencies are shown
+     * @param classDirs source of our class files
      */
-    public ComponentAnalyzer(File classDir, String filterPrefix, boolean shorten, boolean writeDotFiles, 
-            int packageDepth, boolean showClassDeps) {
-        this.classDir = classDir;
+    public ComponentAnalyzer(String filterPrefix, boolean shorten, boolean writeDotFiles, int packageDepth, 
+            boolean showClassDeps, File... classDirs) {
+        this.classDirs = Arrays.copyOf(classDirs, classDirs.length);
         this.filterPrefix = filterPrefix;
         this.shorten = shorten;
         this.writeDotFiles = writeDotFiles;
@@ -74,7 +75,7 @@ public final class ComponentAnalyzer {
      * @throws IOException if parsing the classes fails
      */
     public String analyze() throws IOException {
-        ComponentAnalysis analysis = new ComponentAnalysis(classDir, filterPrefix, packageDepth);
+        ComponentAnalysis analysis = new ComponentAnalysis(filterPrefix, packageDepth, classDirs);
 
         if (!analysis.hasNonTrivialComponents()) {
             return ("No package cycles.");
@@ -110,7 +111,7 @@ public final class ComponentAnalyzer {
         if (!writeDotFiles) {
             return;
         }
-        File dotFile = new File(classDir.getParent(), "graph-" + cycleCount + ".dot");
+        File dotFile = new File(classDirs[0].getParent(), "graph-" + cycleCount + ".dot");
         String dotString = GraphDotUtils.toDot(component, shorten);
         Files.write(dotString, dotFile, Charsets.UTF_8);
     }

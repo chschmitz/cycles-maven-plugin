@@ -36,7 +36,7 @@ import com.google.common.base.Strings;
  * @goal cycles
  * @requiresProject true
  */
-public class CyclesMojo extends AbstractMojo {
+public final class CyclesMojo extends AbstractMojo {
     /**
      * @parameter expression="${project.build.outputDirectory}" 
      */
@@ -70,9 +70,9 @@ public class CyclesMojo extends AbstractMojo {
     private int packageDepth;
 
     @Override
-    public final void execute() throws MojoExecutionException, MojoFailureException {
-        ComponentAnalyzer componentAnalyzer = new ComponentAnalyzer(classDir, 
-                Strings.nullToEmpty(namePrefix), shorten, writeDotFiles, packageDepth, showClassDeps);
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        ComponentAnalyzer componentAnalyzer = new ComponentAnalyzer(Strings.nullToEmpty(namePrefix), 
+                shorten, writeDotFiles, packageDepth, showClassDeps, classDir);
 
         try {
             getLog().info(componentAnalyzer.analyze());
