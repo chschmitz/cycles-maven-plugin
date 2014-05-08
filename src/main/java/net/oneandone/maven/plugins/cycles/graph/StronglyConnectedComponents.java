@@ -42,49 +42,49 @@ public final class StronglyConnectedComponents {
      * @param g a graph
      * @param <V> vertex type
      * @param <E> edge type
-     * @return a collection of components
+     * @return a collection of strongly connected components
      */
     public static <V, E> Collection<Set<V>> strongComponentsAsSets(DirectedGraph<V, E> g) {
         AtomicInteger index = new AtomicInteger(0);
-        Stack<V> s = new Stack<V>();
-        Map<V, Integer> vindex = Maps.newHashMap();
-        Map<V, Integer> vlowlink = Maps.newHashMap();
-        List<Set<V>> acc = Lists.newArrayList();
-        for (V v : g.getVertices()) {
-            if (!vindex.containsKey(v)) {
-                tarjan(v, g, index, s, vindex, vlowlink, acc);
+        Stack<V> vertexStack = new Stack<V>();
+        Map<V, Integer> vIndex = Maps.newHashMap();
+        Map<V, Integer> vLowlink = Maps.newHashMap();
+        List<Set<V>> componentCollector = Lists.newArrayList();
+        for (V vertex : g.getVertices()) {
+            if (!vIndex.containsKey(vertex)) {
+                tarjan(vertex, g, index, vertexStack, vIndex, vLowlink, componentCollector);
             }
         }
-        return acc;
+        return componentCollector;
     }
     
-    private static <V, E> void tarjan(V v, DirectedGraph<V, E> g, AtomicInteger index, Stack<V> s,
-            Map<V, Integer> vindex, Map<V, Integer> vlowlink, List<Set<V>> acc) {
-        vindex.put(v, index.get());
-        vlowlink.put(v, index.get());
+    private static <V, E> void tarjan(V currentVertex, DirectedGraph<V, E> g, AtomicInteger index, Stack<V> vertexStack,
+            Map<V, Integer> vIndex, Map<V, Integer> vLowlink, List<Set<V>> componentCollector) {
+        vIndex.put(currentVertex, index.get());
+        vLowlink.put(currentVertex, index.get());
         index.incrementAndGet();
-        s.push(v);
-        for (V w : g.getSuccessors(v)) {
-            if (!vindex.containsKey(w)) {
-                tarjan(w, g, index, s, vindex, vlowlink, acc);
-                vlowlink.put(v, Math.min(vlowlink.get(v), vlowlink.get(w)));
-            } else if (s.contains(w)) {
-                vlowlink.put(v, Math.min(vlowlink.get(v), vindex.get(w)));
+        vertexStack.push(currentVertex);
+        for (V successor : g.getSuccessors(currentVertex)) {
+            if (!vIndex.containsKey(successor)) {
+                tarjan(successor, g, index, vertexStack, vIndex, vLowlink, componentCollector);
+                vLowlink.put(currentVertex, Math.min(vLowlink.get(currentVertex), vLowlink.get(successor)));
+            } else if (vertexStack.contains(successor)) {
+                vLowlink.put(currentVertex, Math.min(vLowlink.get(currentVertex), vIndex.get(successor)));
             }
         }
-        if (vlowlink.get(v).equals(vindex.get(v))) {
-            extractNewComponent(v, s, acc);
+        if (vLowlink.get(currentVertex).equals(vIndex.get(currentVertex))) {
+            componentCollector.add(extractNewComponent(currentVertex, vertexStack));
         }
     }
 
-    private static <V> void extractNewComponent(V v, Stack<V> s, List<Set<V>> acc) {
+    private static <V> Set<V> extractNewComponent(V currentVertex, Stack<V> vertexStack) {
         Set<V> component = Sets.newHashSet();
-        V w;
+        V vertex;
         do {
-            w = s.pop();
-            component.add(w);
-        } while (v != w);
-        acc.add(component);
+            vertex = vertexStack.pop();
+            component.add(vertex);
+        } while (currentVertex != vertex);
+        return component;
     }
     
     private StronglyConnectedComponents() {
