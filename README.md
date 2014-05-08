@@ -4,6 +4,10 @@ cycles-maven-plugin
 The Maven Cycles Plugin detects package dependency cycles and suggests
 dependencies that should be removed to get back to an acyclic package graph.
 
+The plugin tries to suggest those dependencies for removal that go from stable 
+to unstable packages, i.e., from packages with a high in-degree to those with 
+a high out-degree.
+
 Example Usage
 -------------
 
