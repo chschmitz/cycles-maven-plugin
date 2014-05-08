@@ -66,6 +66,9 @@ mvn cycles:cycles -Dshorten=false -Dnameprefix=net.oneandone.maven.plugins.cycle
   
   * <<<packageDepth>>>: Iff true, packages will be aggregated to this depth (e.g., if packageDepth == 2,
     all packages <<<net.oneandone.*>>> will be counted as <<<net.oneandone>>>).
+
+  * <<<includeTestClasses>>>: Iff true, the test classes (<<<target/test-classes>>>) will be considered,
+    too (default:false)
   
 {Configuration}
 

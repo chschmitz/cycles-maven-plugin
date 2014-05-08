@@ -41,7 +41,7 @@ public final class CyclesMojo extends AbstractMojo {
      * @parameter expression="${project.build.outputDirectory}" 
      */
     private File classDir;
-
+    
     /**
      * @parameter expression="${nameprefix}"
      */
@@ -55,7 +55,12 @@ public final class CyclesMojo extends AbstractMojo {
     /**
      * @parameter expression="${classDeps}" default-value="false"
      */
-    private boolean showClassDeps;
+    private boolean showClassDeps;    
+    
+    /**
+     * @parameter expression="${includeTestClasses}" default-value="false"
+     */
+    private boolean includeTestClasses;
 
     /**
      * @parameter expression="${writeDotFiles}" default-value="true"
@@ -71,8 +76,15 @@ public final class CyclesMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        ComponentAnalyzer componentAnalyzer = new ComponentAnalyzer(Strings.nullToEmpty(namePrefix), 
-                shorten, writeDotFiles, packageDepth, showClassDeps, classDir);
+        ComponentAnalyzer componentAnalyzer = null;
+        if (includeTestClasses) {
+            // FIXME: is there a reliable property for target/test-classes?
+            componentAnalyzer = new ComponentAnalyzer(Strings.nullToEmpty(namePrefix), shorten, writeDotFiles, 
+                    packageDepth, showClassDeps, classDir, new File(classDir.getParentFile(), "test-classes")); 
+        } else {
+            componentAnalyzer = new ComponentAnalyzer(Strings.nullToEmpty(namePrefix), shorten, writeDotFiles, 
+                    packageDepth, showClassDeps, classDir);             
+        }
 
         try {
             getLog().info(componentAnalyzer.analyze());
