@@ -27,4 +27,14 @@ added to it for demonstration purposes:
     = Cycle-breaking dependencies
     c.u.m.c.graph -> c.u.m.c.analyzer [1]
 
+Other features include:
+
+  * Output of cycles in [Graphviz][http://www.graphviz.org] format for visualization
+
+  * Aggregation of packages to a certain depth
+
+  * Optional inclusion of test classes
+
+  * Output of the class-level dependencies
+
 Refer to the Maven site documentation for more details.
