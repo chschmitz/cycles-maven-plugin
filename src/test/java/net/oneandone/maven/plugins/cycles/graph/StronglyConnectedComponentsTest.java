@@ -73,13 +73,7 @@ public class StronglyConnectedComponentsTest {
 
     @Test
     public void testTwoComponents() {
-        DirectedGraph<Integer, Integer> graph = new DirectedSparseGraph<Integer, Integer>();
-        graph.addEdge(0, 0, 1);
-        graph.addEdge(1, 1, 0);
-        graph.addEdge(2, 1, 2);
-        graph.addEdge(3, 2, 3);
-        graph.addEdge(4, 3, 4);
-        graph.addEdge(5, 4, 2);
+        DirectedGraph<Integer, Integer> graph = buildGraphTwoComponents();
 
         Collection<Set<Integer>> components = StronglyConnectedComponents.strongComponentsAsSets(graph);
         assertThat(components.size(), is(2));
@@ -99,13 +93,7 @@ public class StronglyConnectedComponentsTest {
 
     @Test
     public void testTwoComponentsSubgraphs() {
-        DirectedGraph<Integer, Integer> graph = new DirectedSparseGraph<Integer, Integer>();
-        graph.addEdge(0, 0, 1);
-        graph.addEdge(1, 1, 0);
-        graph.addEdge(2, 1, 2);
-        graph.addEdge(3, 2, 3);
-        graph.addEdge(4, 3, 4);
-        graph.addEdge(5, 4, 2);
+        DirectedGraph<Integer, Integer> graph = buildGraphTwoComponents();
 
         Collection<DirectedGraph<Integer, Integer>> components = SubgraphUtils.asSubgraphs(
                 StronglyConnectedComponents.strongComponentsAsSets(graph), graph);
@@ -124,6 +112,17 @@ public class StronglyConnectedComponentsTest {
         }
     }
 
+    private DirectedGraph<Integer, Integer> buildGraphTwoComponents() {
+        DirectedGraph<Integer, Integer> graph = new DirectedSparseGraph<Integer, Integer>();
+        graph.addEdge(0, 0, 1);
+        graph.addEdge(1, 1, 0);
+        graph.addEdge(2, 1, 2);
+        graph.addEdge(3, 2, 3);
+        graph.addEdge(4, 3, 4);
+        graph.addEdge(5, 4, 2);
+        return graph;
+    }
+    
     @Test
     public void testLargeLoop() {
         DirectedGraph<Integer, Integer> graph = new DirectedSparseGraph<Integer, Integer>();

@@ -48,22 +48,21 @@ public final class GraphDotUtils {
         builder.append("digraph mygraph {\n");
         double maxEdgeWeight = getMaxEdgeWeight(component);
         for (WeightedEdge edge : sortedEdges) {
-            builder.append("    ");
-            builder.append(GraphDotUtils.edgeToDot(edge, component, shorten));
-
-            builder.append("[");
-            builder.append("label=\"" + (int) edge.getWeight() + "\"");
-            double relativeImportance = edge.getWeight() / maxEdgeWeight;
-            builder.append(",fontsize=" + (STANDARD_FONTSIZE + (FONT_SIZE * relativeImportance)));
-            if (feedbackArcs.contains(edge)) {
-                builder.append(",color=red,fontcolor=red,penwidth=3");
-            }
-            builder.append("]");
-
-            builder.append(";\n");
+            builder.append(formatEdge(component, shorten, feedbackArcs, edge, maxEdgeWeight));
         }
         builder.append("}\n");
         return builder.toString();
+    }
+
+    private static String formatEdge(DirectedGraph<String, WeightedEdge> component, boolean shorten,
+            Collection<WeightedEdge> feedbackArcs, WeightedEdge edge, double maxEdgeWeight) {
+        double relativeImportance = edge.getWeight() / maxEdgeWeight;
+        return String.format("    %s [label=\"%d\", fontsize=%f%s];\n",
+            GraphDotUtils.edgeToDot(edge, component, shorten),
+            (int) edge.getWeight(),
+            (STANDARD_FONTSIZE + (FONT_SIZE * relativeImportance)),
+            feedbackArcs.contains(edge) ? ",color=red,fontcolor=red,penwidth=3" : ""
+        );
     }
 
     private static double getMaxEdgeWeight(DirectedGraph<String, WeightedEdge> component) {

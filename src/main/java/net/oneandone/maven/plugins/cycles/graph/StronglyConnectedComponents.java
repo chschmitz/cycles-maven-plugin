@@ -65,15 +65,21 @@ public final class StronglyConnectedComponents {
         index.incrementAndGet();
         vertexStack.push(currentVertex);
         for (V successor : g.getSuccessors(currentVertex)) {
-            if (!vIndex.containsKey(successor)) {
-                tarjan(successor, g, index, vertexStack, vIndex, vLowlink, componentCollector);
-                vLowlink.put(currentVertex, Math.min(vLowlink.get(currentVertex), vLowlink.get(successor)));
-            } else if (vertexStack.contains(successor)) {
-                vLowlink.put(currentVertex, Math.min(vLowlink.get(currentVertex), vIndex.get(successor)));
-            }
+            processSuccessor(currentVertex, g, index, vertexStack, vIndex, vLowlink, componentCollector, successor);
         }
         if (vLowlink.get(currentVertex).equals(vIndex.get(currentVertex))) {
             componentCollector.add(extractNewComponent(currentVertex, vertexStack));
+        }
+    }
+
+    private static <V, E> void processSuccessor(V currentVertex, DirectedGraph<V, E> g, AtomicInteger index,
+            Stack<V> vertexStack, Map<V, Integer> vIndex, Map<V, Integer> vLowlink, List<Set<V>> componentCollector,
+            V successor) {
+        if (!vIndex.containsKey(successor)) {
+            tarjan(successor, g, index, vertexStack, vIndex, vLowlink, componentCollector);
+            vLowlink.put(currentVertex, Math.min(vLowlink.get(currentVertex), vLowlink.get(successor)));
+        } else if (vertexStack.contains(successor)) {
+            vLowlink.put(currentVertex, Math.min(vLowlink.get(currentVertex), vIndex.get(successor)));
         }
     }
 
