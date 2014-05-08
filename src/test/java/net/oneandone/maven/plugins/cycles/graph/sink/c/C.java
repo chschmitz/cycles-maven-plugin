@@ -18,5 +18,5 @@ package net.oneandone.maven.plugins.cycles.graph.sink.c;
 import net.oneandone.maven.plugins.cycles.graph.source.a.A;
 
 public class C {
-    A c;
+    A a;
 }

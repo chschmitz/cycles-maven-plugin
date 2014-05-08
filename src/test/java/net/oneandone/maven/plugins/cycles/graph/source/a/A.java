@@ -19,6 +19,6 @@ import net.oneandone.maven.plugins.cycles.graph.sink.b.B;
 import net.oneandone.maven.plugins.cycles.graph.sink.c.C;
 
 public class A {
-    private B b;
-    private C c;
+    B b;
+    C c;
 }
