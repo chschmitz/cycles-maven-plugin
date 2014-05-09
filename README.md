@@ -34,6 +34,7 @@ added to it for demonstration purposes:
 Other features include:
 
   * Output of cycles in [Graphviz](http://www.graphviz.org) format for visualization:
+  
     ![Cycles graph](src/site/resources/images/graph.png)  
   * Aggregation of packages to a certain depth
   * Optional inclusion of test classes
