@@ -16,10 +16,14 @@
 package net.oneandone.maven.plugins.cycles.graph;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,11 +47,20 @@ public class GraphBuilderTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testBuildGraphCollapse() throws IOException {
         DirectedGraph<String, WeightedEdge> graph = GraphBuilder.buildPackageGraph(NameFilter.nameFilter("net.oneandone.maven.plugins.cycles.graph"), 
                 7, baseDir);
+        
         assertThat(graph.getVertexCount(), is(2));
         assertThat(graph.getEdgeCount(), is(2));
-        assertThat(graph.getEdges().iterator().next().getWeight(), is(2d));
+        
+        Set<Double> actualWeights = new HashSet<Double>();
+        for (WeightedEdge e: graph.getEdges()) {
+            actualWeights.add(e.getWeight());
+        }
+        
+        assertThat(actualWeights.size(), is(2));
+        assertThat(actualWeights, hasItems(closeTo(1d, 1e-7), closeTo(2d, 1e-7)));
     }
 }
