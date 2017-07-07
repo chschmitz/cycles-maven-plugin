@@ -38,39 +38,39 @@ import com.google.common.base.Strings;
  */
 public final class CyclesMojo extends AbstractMojo {
     /**
-     * @parameter expression="${project.build.outputDirectory}" 
+     * @parameter property="project.build.outputDirectory" 
      */
     private File classDir;
     
     /**
-     * @parameter expression="${nameprefix}"
+     * @parameter property="nameprefix"
      */
     private String namePrefix;
 
     /**
-     * @parameter expression="${shorten}" default-value="true"
+     * @parameter property="shorten" default-value="true"
      */
     private boolean shorten;
     
     /**
-     * @parameter expression="${classDeps}" default-value="false"
+     * @parameter property="classDeps" default-value="false"
      */
     private boolean showClassDeps;    
     
     /**
-     * @parameter expression="${includeTestClasses}" default-value="false"
+     * @parameter property="includeTestClasses" default-value="false"
      */
     private boolean includeTestClasses;
 
     /**
-     * @parameter expression="${writeDotFiles}" default-value="true"
+     * @parameter property="writeDotFiles" default-value="true"
      */
     private boolean writeDotFiles;
 
     /**
      * Default is Integer.MAX_VALUE (== infinity for practical purposes).
      * 
-     * @parameter expression="${packageDepth}" default-value="2147483647"
+     * @parameter property="packageDepth" default-value="2147483647"
      */
     private int packageDepth;
 
